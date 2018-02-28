@@ -1,0 +1,233 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link href="../css/style.css" rel="stylesheet" />
+		<style>
+			html,body{
+				background: #fff;
+			}
+			.mui-content{
+				background: #fff;
+			}
+			.top-image-block{
+				text-align: center;
+				padding:10px 0;
+				background: #3c3c3c;
+			}
+			.top-image-block img{
+				width: 160px;
+				height: 240px;
+				vertical-align: top;
+			}
+			.mui-bar-nav{
+   				-webkit-box-shadow: none;
+            		box-shadow: none;
+			}
+			.content-one,.content-two{
+				padding: 14px;
+				background: #fff;
+			}
+			.content-one{
+				height: 90px;
+			}
+			.content-left{
+				float: left;
+			}
+			.content-right{
+				float: right;
+				width: 60px;
+				height: 60px;
+				background: #fff;
+				text-align: center;
+				box-shadow: 0px 0px 10px #AAAAAA;
+			}
+			.line{	
+				height: 0.5px;
+				background: #A2A2A2;	
+				margin-left: 14px;
+			}
+			.mui-ellipsis-4{
+			    display: -webkit-box;
+			    overflow: hidden;
+			
+			    white-space: normal !important;
+			    text-overflow: ellipsis;
+			    word-wrap: break-word;
+			
+			    -webkit-line-clamp: 4;
+			    -webkit-box-orient: vertical;
+			}
+			.casts{
+				overflow-x: scroll;
+				white-space: nowrap;
+				padding: 0;
+				margin: 0;
+			}
+			.casts-li{
+				display: inline-block;
+				width: 70px;
+				margin-right: 10px;
+				list-style: none;
+				text-align: center;	
+			}
+			.casts-li img{
+				width: 70px;
+			}
+			.comment-title{
+				height: 40px;
+				line-height: 40px;
+				background: #e6e6e6;
+				text-align: center;
+			}
+			.comment-img{
+				width:30px;
+				height:30px;
+				border-radius: 50%;
+			}
+			.mui-table-view:before{
+			    height: 0px;
+			}
+			.mui-table-view:after{
+				left:14px;
+			}
+			.commentator{
+				line-height: 30px;
+				margin-left: 10px;
+			}
+			.comment-time{
+				line-height: 30px;
+				float: right;
+			}
+			.comment-content{
+				margin-left: 40px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">电影</h1>
+		</header>
+		<div id='content' class="mui-content">
+			<div class="top-image-block">
+				<img alt="" :src='cover'/>
+			</div>
+			<div class="content-one">
+				<div style="overflow: hidden;">
+					<div class="content-left">
+						<div class="dark-big">{{title}}</div>
+						<div class="gray-small">{{year}}/{{countries.toString("/,/g","/")}}/{{genres.toString("/,/g","/")}}</div>
+						<div class="gray-small">{{directors.length>0?directors[0].name:''}}导演作品</div>
+					</div>
+					<div class="content-right">
+						<div class="gray-small">豆瓣评分</div>
+						<div class="dark-big" v-if='score>0'>{{score}}</div>
+						<div class="dark-big" v-else>暂无评分</div>
+						<div class="gray-small">{{ratingCount}}人</div>
+					</div>
+				</div>
+			</div>
+			<div class="line"></div>
+			<div class="content-two">
+				<p class="gray-small">剧情简介</p>
+				<p class="dark-medium mui-ellipsis-4">{{summary}}</p>
+				<p class="gray-small">演员</p>
+				<ul class="casts">
+					<li class="casts-li" v-for='item in casts' @click='open_detail(item)'>
+						<img :src="cover" alt="" />
+						<div class="dark-small mui-ellipsis">{{item.name}}</div>
+					</li>
+				</ul>
+			</div>
+			<p class="dark-medium comment-title">评论</p>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<img class="comment-img mui-pull-left" src="../images/icon_commentphoto.jpg" alt="" />
+					<div>
+						<span class="dark-medium commentator">评论人</span>
+						<span class="gray-medium comment-time">2017-10-12</span>
+					</div>
+					<p class="dark-medium comment-content">电影很棒！！！</p>
+				</li>
+			</ul>
+		</div>
+		
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/vue.min.js"></script>
+		<script type="text/javascript">
+			mui.init();
+			//获取默认数据
+			function getDefault(){
+				return{
+					title:'',
+					cover:'',
+					score:'',
+					ratingCount:'',
+					summary:'',
+					countries:'',
+					year:'',
+					genres:'',
+					casts:[],
+					directors:[]
+				}
+			}
+			//vue对象
+			var data_detail=new Vue({
+				el:'#content',
+				data:getDefault(),
+				methods:{
+					resetData:function(){//重置数据
+						Object.assign(this.$data,getDefault());
+					},
+					open_detail:function(item){
+						//打开演员详情页
+						mui.openWindow({
+							id:'cast-detail',
+							url:'./cast-detail.html',
+							extras:{
+								castId:item.id
+							}
+						})
+					}
+				}
+			});
+			mui.plusReady(function(){
+				var self=plus.webview.currentWebview();
+				//添加hide事件，清空页面数据，滚到最顶部
+				self.addEventListener('hide',function(e){
+					window.scrollTo(0,0);
+					data_detail.resetData();
+				},false)
+			})
+			//添加movieId自定义事件
+			window.addEventListener('movieId',function(){
+				//获取事件参数
+				var id=event.detail.id;
+				plus.nativeUI.showWaiting('加载中',{
+					width: "100px",
+					height:"100px"
+				});
+				mui.getJSON('https://api.douban.com/v2/movie/subject/'+id,function(resp){
+					data_detail.title=resp.title;
+					data_detail.cover=resp.images.large;
+					data_detail.score=resp.rating.average;
+					data_detail.ratingCount=resp.ratings_count;
+					data_detail.summary=resp.summary;
+					data_detail.countries=resp.countries.toString("/,/g","/");
+					data_detail.year=resp.year;
+					data_detail.genres=resp.genres.toString("/,/g","/");
+					data_detail.casts=resp.casts;
+					data_detail.directors=resp.directors;
+					plus.nativeUI.closeWaiting();
+				})
+			})
+		</script>
+	</body>
+
+</html>

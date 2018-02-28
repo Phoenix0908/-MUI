@@ -1,0 +1,36 @@
+.dark-big{
+	color: #333;
+	font-size: 16px;
+}
+.dark-medium{
+	color: #333;
+	font-size: 14px;
+}
+.dark-small{
+	color: #333;
+	font-size: 12px;
+}
+.gray-big{
+	color: #a2a2a2;
+	font-size: 16px;
+}
+.gray-medium{
+	color: #a2a2a2;
+	font-size: 14px;
+}
+.gray-small{
+	color: #a2a2a2;
+	font-size: 12px;
+}
+.orange-big{
+	color: #F79709;
+	font-size: 16px;
+}
+.orange-medium{
+	color: #F79709;
+	font-size: 14px;
+}
+.orange-small{
+	color: #F79709;
+	font-size: 12px;
+}
